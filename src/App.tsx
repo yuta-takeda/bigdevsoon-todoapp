@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import lightModeIcon from "./assets/icons/light-mode.svg";
 import emptyState from "./assets/emptystate.png";
 
 function App() {
+  const [todos, setTodos] = useState<string[]>([]);
+  const [showButton, setShowButton] = useState(false);
+
+  const addTodo = () => {
+    const input = document.querySelector<HTMLInputElement>(".input");
+    if (!input) {
+      return;
+    }
+
+    const value = input.value;
+    if (value == "") {
+      alert("Please enter a value");
+      return;
+    }
+    const newTodos = [...todos, value];
+    setTodos(newTodos);
+    setShowButton(false);
+    input.value = "";
+  };
+
   return (
     <div className="App">
       <div className="header">
@@ -18,16 +38,31 @@ function App() {
             type="text"
             className="input"
             placeholder="Create a new todo..."
+            onChange={() => setShowButton(true)}
           />
-          <button type="button" className="button">
-            Add todo
-          </button>
+          {showButton && (
+            <button type="button" className="button" onClick={() => addTodo()}>
+              Add todo
+            </button>
+          )}
         </div>
-        <div className="todoList">
-          <img src={emptyState} className="emptyState" alt="no todo" />
-          <p>You're todo's are empty</p>
-          <small>Please add first one</small>
-        </div>
+        {todos ? (
+          <div className="todoList">
+            {todos.map((todo, index) => {
+              return (
+                <div className="todo" key={index}>
+                  {todo}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="emptyTodo">
+            <img src={emptyState} className="emptyState" alt="no todo" />
+            <p>You're todo's are empty</p>
+            <small>Please add first one</small>
+          </div>
+        )}
       </div>
     </div>
   );
