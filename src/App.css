@@ -93,6 +93,19 @@ body {
   color: white;
 }
 
+.todoLabel {
+  display: flex;
+  align-items: center;
+}
+
+.todoLabel > input {
+  margin-right: 0.5em;
+}
+
+.todoTextCompleted {
+  text-decoration: line-through;
+}
+
 .todo {
   border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 8px;
@@ -118,4 +131,10 @@ body {
 
 .deleteTodo:hover {
   opacity: 0.6;
+}
+
+.footer {
+  color: white;
+  text-align: right;
+  margin: 1em;
 }

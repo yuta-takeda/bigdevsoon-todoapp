@@ -7,6 +7,7 @@ import deleteIcon from "./assets/icons/close.svg";
 interface Todo {
   id: number;
   text: string;
+  completed: boolean;
 }
 
 function App() {
@@ -25,11 +26,39 @@ function App() {
       return;
     }
     const lastId = Math.max(Math.max(...todos.map((todo) => todo.id)), 1);
-    const newTodos = [...todos, { id: lastId + 1, text: value }];
-    console.log(newTodos);
-    setTodos(newTodos);
+    const newTodos = [
+      ...todos,
+      { id: lastId + 1, text: value, completed: false },
+    ];
+    const sortedTodos = sortTodo(newTodos);
+    setTodos(sortedTodos);
     setShowButton(false);
     input.value = "";
+  };
+
+  const deleteTodo = (event: MouseEvent, id: number) => {
+    event.stopPropagation();
+
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    const sortedTodos = sortTodo(newTodos);
+    setTodos(sortedTodos);
+  };
+
+  const toggleCompleted = (id: number) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    });
+    const sortedTodos = sortTodo(newTodos);
+    setTodos(sortedTodos);
+  };
+
+  const sortTodo = (todos: Todo[]) => {
+    return todos.sort((a: Todo, b: Todo) => {
+      return Number(a.completed) - Number(b.completed);
+    });
   };
 
   const showDeleteButton = (event: MouseEvent) => {
@@ -50,11 +79,6 @@ function App() {
       return;
     }
     deleteIcon.style.display = "none";
-  };
-
-  const deleteTodo = (id: number) => {
-    const newTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodos);
   };
 
   return (
@@ -88,18 +112,34 @@ function App() {
                   key={todo.id}
                   onMouseEnter={(e) => showDeleteButton(e)}
                   onMouseLeave={(e) => hideDeleteButton(e)}
+                  onClick={() => toggleCompleted(todo.id)}
                 >
-                  <div className="todoText">{todo.text}</div>
+                  <div className="todoLabel">
+                    <input type="checkbox" checked={todo.completed} />
+                    <div
+                      className={
+                        todo.completed ? "todoTextCompleted" : "todoText"
+                      }
+                    >
+                      {todo.text}
+                    </div>
+                  </div>
                   <img
                     src={deleteIcon}
                     className="deleteTodo"
                     height="24"
                     width="24"
-                    onClick={() => deleteTodo(todo.id)}
+                    onClick={(e) => deleteTodo(e, todo.id)}
                   />
                 </div>
               );
             })}
+            <footer className="footer">
+              <p>
+                {todos.filter((todo) => todo.completed).length} / {todos.length}{" "}
+                tasks completed
+              </p>
+            </footer>
           </div>
         ) : (
           <div className="emptyTodo">
