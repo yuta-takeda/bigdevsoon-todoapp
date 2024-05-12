@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent } from "react";
 import "./App.css";
 import lightModeIcon from "./assets/icons/light-mode.svg";
-import emptyState from "./assets/emptystate.png";
+import emptyState from "./assets/emptystate.svg";
 import deleteIcon from "./assets/icons/close.svg";
 
 interface Todo {
