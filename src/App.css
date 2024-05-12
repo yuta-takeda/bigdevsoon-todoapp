@@ -99,5 +99,23 @@ body {
   margin: 1em;
   padding: 1em;
   text-align: left;
+  vertical-align: middle;
   color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 24px;
+}
+
+.todo:hover {
+  opacity: 0.6;
+}
+
+.deleteTodo {
+  display: none;
+}
+
+.deleteTodo:hover {
+  opacity: 0.6;
 }

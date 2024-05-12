@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, MouseEvent } from "react";
 import "./App.css";
 import lightModeIcon from "./assets/icons/light-mode.svg";
 import emptyState from "./assets/emptystate.png";
+import deleteIcon from "./assets/icons/close.svg";
+
+interface Todo {
+  id: number;
+  text: string;
+}
 
 function App() {
-  const [todos, setTodos] = useState<string[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [showButton, setShowButton] = useState(false);
 
   const addTodo = () => {
@@ -18,10 +24,37 @@ function App() {
       alert("Please enter a value");
       return;
     }
-    const newTodos = [...todos, value];
+    const lastId = Math.max(Math.max(...todos.map((todo) => todo.id)), 1);
+    const newTodos = [...todos, { id: lastId + 1, text: value }];
+    console.log(newTodos);
     setTodos(newTodos);
     setShowButton(false);
     input.value = "";
+  };
+
+  const showDeleteButton = (event: MouseEvent) => {
+    const target = event.target as HTMLDivElement;
+    const deleteIcon: HTMLImageElement | null =
+      target.querySelector(".deleteTodo");
+    if (!deleteIcon) {
+      return;
+    }
+    deleteIcon.style.display = "block";
+  };
+
+  const hideDeleteButton = (event: MouseEvent) => {
+    const target = event.target as HTMLDivElement;
+    const deleteIcon: HTMLImageElement | null =
+      target.querySelector(".deleteTodo");
+    if (!deleteIcon) {
+      return;
+    }
+    deleteIcon.style.display = "none";
+  };
+
+  const deleteTodo = (id: number) => {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
   };
 
   return (
@@ -46,12 +79,24 @@ function App() {
             </button>
           )}
         </div>
-        {todos ? (
+        {todos.length > 0 ? (
           <div className="todoList">
-            {todos.map((todo, index) => {
+            {todos.map((todo) => {
               return (
-                <div className="todo" key={index}>
-                  {todo}
+                <div
+                  className="todo"
+                  key={todo.id}
+                  onMouseEnter={(e) => showDeleteButton(e)}
+                  onMouseLeave={(e) => hideDeleteButton(e)}
+                >
+                  <div className="todoText">{todo.text}</div>
+                  <img
+                    src={deleteIcon}
+                    className="deleteTodo"
+                    height="24"
+                    width="24"
+                    onClick={() => deleteTodo(todo.id)}
+                  />
                 </div>
               );
             })}
