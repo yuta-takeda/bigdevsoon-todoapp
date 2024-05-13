@@ -1,6 +1,7 @@
 import React, { useState, MouseEvent } from "react";
 import "./App.css";
 import lightModeIcon from "./assets/icons/light-mode.svg";
+import darkModeIcon from "./assets/icons/dark-mode.svg";
 import emptyState from "./assets/emptystate.svg";
 import deleteIcon from "./assets/icons/close.svg";
 
@@ -13,6 +14,7 @@ interface Todo {
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [showButton, setShowButton] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const addTodo = () => {
     const input = document.querySelector<HTMLInputElement>(".input");
@@ -81,12 +83,30 @@ function App() {
     deleteIcon.style.display = "none";
   };
 
+  const toggleTheme = () => {
+    const html = document.querySelector("html");
+    if (!html) {
+      return;
+    }
+
+    if (html.classList.contains("darkmode")) {
+      html.classList.remove("darkmode");
+      setIsDarkMode(false);
+    } else {
+      html.classList.add("darkmode");
+      setIsDarkMode(true);
+    }
+  };
+
   return (
     <div className="App">
       <div className="header">
         <div className="title">TODO</div>
-        <div className="toggle">
-          <img src={lightModeIcon} alt={"モード切替"} />
+        <div className="toggle" onClick={() => toggleTheme()}>
+          <img
+            src={isDarkMode ? lightModeIcon : darkModeIcon}
+            alt={"モード切替"}
+          />
         </div>
       </div>
       <div className="background">
