@@ -111,17 +111,23 @@ function App() {
       </div>
       <div className="background">
         <div className="addTodo">
-          <input
-            type="text"
-            className="input"
-            placeholder="Create a new todo..."
-            onChange={() => setShowButton(true)}
-          />
-          {showButton && (
-            <button type="button" className="button" onClick={() => addTodo()}>
-              Add todo
-            </button>
-          )}
+          <div className="inputField">
+            <input
+              type="text"
+              className="input"
+              placeholder="Create a new todo..."
+              onChange={() => setShowButton(true)}
+            />
+            {showButton && (
+              <button
+                type="button"
+                className="button"
+                onClick={() => addTodo()}
+              >
+                Add todo
+              </button>
+            )}
+          </div>
         </div>
         {todos.length > 0 ? (
           <div className="todoList">
